@@ -167,7 +167,7 @@ Status checkString(char s[])
                 else if ((c == '+'||c == '-') && (a[k] == '*'||a[k] == '/'))
                 {
                     printf("输入表达式错误！");
-                    inputString(s);
+                    return ERROR;
                 }
             }
             if (c == '+' || c == '-' || c == '*' || c == '/')
@@ -185,7 +185,7 @@ Status checkString(char s[])
     if (s[i-1] == '+' || s[i-1] == '-' || s[i-1] == '*' || s[i-1] == '/' || bracket != 0)
     {
         printf("表达式输入错误!");
-        inputString(s);
+        return ERROR;
     }
 	printf("\n最终的表达式为:");
     for (k = 0; s[k] != '\0'; k++)

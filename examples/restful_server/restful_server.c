@@ -4,9 +4,55 @@
  */
 
 #include "mongoose.h"
+#include "calculator.h"
 
-static const char *s_http_port = "8000";
+static const char *s_http_port = "8018";
 static struct mg_serve_http_opts s_http_server_opts;
+
+static int get_expression(const char *str, char *sub_str)
+{
+	const char *str_head = "/";
+	const char *str_tail = " HTTP/1.1";
+	char *begin = NULL;
+	char *end = NULL;
+ 
+	begin = strstr(str, str_head);
+	end = strstr(str, str_tail);
+ 
+	if (begin == NULL || end == NULL || begin > end)
+	{
+		return -1;
+	}
+	else
+	{
+		begin += strlen(str_head);
+		memcpy(sub_str, begin, end-begin);
+	}
+ 
+	return 0;
+}
+
+static void handle_calculate(char aExpression1[])
+{
+    char aExpression2[1024] = {0};
+	
+    LinkStackT *symbol = (LinkStackT *)malloc(sizeof(LinkStackT));
+    LinkStackT *number = (LinkStackT *)malloc(sizeof(LinkStackT));
+    initLStack(symbol);
+    initLStack(number);
+	
+    if (SUCCESS == checkString(aExpression1))
+    {
+	    convertString(aExpression1, aExpression2, symbol);
+	    double temp = computeString(number, aExpression2);
+	    printf("\n 结果为-->%.2lf\n", temp);
+    }	
+
+    destroyLStack(symbol);
+    destroyLStack(number);
+    free(symbol);
+    free(number);
+}
 
 static void handle_sum_call(struct mg_connection *nc, struct http_message *hm) {
   char n1[100], n2[100];
@@ -30,6 +76,13 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
 
   switch (ev) {
     case MG_EV_HTTP_REQUEST:
+  	{
+		char expression[1024] = {0};	
+		if (!get_expression(hm->uri.p, expression))
+		{
+			handle_calculate(expression);
+		}
+
       if (mg_vcmp(&hm->uri, "/api/v1/sum") == 0) {
         handle_sum_call(nc, hm); /* Handle RESTful call */
       } else if (mg_vcmp(&hm->uri, "/printcontent") == 0) {
@@ -41,6 +94,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
         mg_serve_http(nc, hm, s_http_server_opts); /* Serve static content */
       }
       break;
+    }
     default:
       break;
   }
