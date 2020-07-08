@@ -32,7 +32,7 @@ static int get_expression(const char *str, char *sub_str)
 	return 0;
 }
 
-static double handle_calculate(struct mg_connection *nc, char aExpression1[])
+static double handle_calculate(char aExpression1[])
 {
     char aExpression2[1024] = {0};
 	double result = 0;
@@ -54,11 +54,6 @@ static double handle_calculate(struct mg_connection *nc, char aExpression1[])
     free(symbol);
     free(number);
 
-	/* Send headers */
-	mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
-
-	mg_printf_http_chunk(nc, "{ \"result\": %lf }", result);
-	mg_send_http_chunk(nc, "", 0); /* Send empty chunk, the end of response */
 
 	return result;
 }
@@ -69,10 +64,19 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
 	switch (ev) {
 	case MG_EV_HTTP_REQUEST:
 	{
-		char expression[1024] = {0};	
+		char expression[1024] = {0};
+		double result = 0;
 		if (!get_expression(hm->uri.p, expression))
 		{
-			handle_calculate(nc, expression);
+			if (strlen(expression) > 0)
+			{
+				result = handle_calculate(expression);
+			}
+			/* Send headers */
+			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
+			
+			mg_printf_http_chunk(nc, "{ \"result\": %lf }", result);
+			mg_send_http_chunk(nc, "", 0); /* Send empty chunk, the end of response */
 		}
 		mg_serve_http(nc, hm, s_http_server_opts); /* Serve static content */
 		break;
