@@ -121,7 +121,9 @@ Status popLStackchar(LinkStackT *s, char *data)
  */
 Status checkString(char s[])  
 {
-    int i,j,k = 0;
+    int i = 0;
+	int j = 0;
+	int k = 0;
     char a[20] = {0};   // 存放运算符
     int flag = 0;       // 用于判断该数是否为负数  例如：5*-3，则3的实际为-3
     int bracket = 0;    // 检测括号的配对关系
@@ -220,7 +222,8 @@ char getTopLStackchar(LinkStackT *s)
  */
 Status convertString(char s1[], char s2[], LinkStackT *s)
 {
-    int i = 0 , j = 0;
+    int i = 0;
+	int j = 0;
     int flag = 0;		//用于分隔右括号和运算符
     char c;
 	

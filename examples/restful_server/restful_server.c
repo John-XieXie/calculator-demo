@@ -42,12 +42,9 @@ static double handle_calculate(char aExpression1[])
     initLStack(symbol);
     initLStack(number);
 	
-    if (SUCCESS == checkString(aExpression1))
-    {
-	    convertString(aExpression1, aExpression2, symbol);
-	    result = computeString(number, aExpression2);
-	    printf("\n 结果为-->%.2lf\n", result);
-    }	
+    convertString(aExpression1, aExpression2, symbol);
+    result = computeString(number, aExpression2);
+    printf("\n 结果为-->%.2lf\n", result);
 
     destroyLStack(symbol);
     destroyLStack(number);
@@ -68,7 +65,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
 		double result = 0;
 		if (!get_expression(hm->uri.p, expression))
 		{
-			if (strlen(expression) > 0)
+			if (strlen(expression) > 0 && SUCCESS == checkString(expression))
 			{
 				result = handle_calculate(expression);
 			}

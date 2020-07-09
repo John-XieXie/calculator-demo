@@ -2,6 +2,8 @@
 #include <malloc.h>
 #include <math.h>
 
+typedef long long int64;
+
 // 返回值结构体
 typedef enum Status {
     ERROR 		= 0, 
@@ -11,15 +13,16 @@ typedef enum Status {
 // 栈节点结构体
 typedef  struct StackNodeS
 {
-    char 		cData;
     double 		data;
+    char 		cData;
+	char		align[7];
     struct StackNodeS *next;
 } StackNodeT, *LinkStackTPtr;
 
 // 链栈
 typedef  struct LinkStackS{
     LinkStackTPtr 	top;
-    int				count;
+    int64			count;
 } LinkStackT;
 
 Status initLStack(LinkStackT *s);//初始化栈
