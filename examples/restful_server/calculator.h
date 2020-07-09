@@ -6,23 +6,23 @@ typedef long long int64;
 
 // 返回值结构体
 typedef enum Status {
-    ERROR 		= 0, 
-	SUCCESS 	= 1
+    ERROR       = 0,
+    SUCCESS     = 1
 } Status;
 
 // 栈节点结构体
 typedef  struct StackNodeS
 {
-    double 		data;
-    char 		cData;
-	char		align[7];
+    double      data;
+    char        cData;
+    char        align[7];
     struct StackNodeS *next;
 } StackNodeT, *LinkStackTPtr;
 
 // 链栈
 typedef  struct LinkStackS{
-    LinkStackTPtr 	top;
-    int64			count;
+    LinkStackTPtr   top;
+    int64           count;
 } LinkStackT;
 
 Status initLStack(LinkStackT *s);//初始化栈

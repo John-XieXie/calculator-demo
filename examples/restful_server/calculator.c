@@ -119,15 +119,15 @@ Status popLStackchar(LinkStackT *s, char *data)
 /**
  * 检查字符串的输入
  */
-Status checkString(char s[])  
+Status checkString(char s[])
 {
     int i = 0;
-	int j = 0;
-	int k = 0;
+    int j = 0;
+    int k = 0;
     char a[20] = {0};   // 存放运算符
     int flag = 0;       // 用于判断该数是否为负数  例如：5*-3，则3的实际为-3
     int bracket = 0;    // 检测括号的配对关系
-    
+
     for (i = 0; s[i] != '\0'; i++)
     {
         //将数字间的运算符存储起来
@@ -179,7 +179,7 @@ Status checkString(char s[])
                     s[k] = s[k+j-1];
                i = i-j+2;
             }
-          	for (k = 0; k < j; k++)
+            for (k = 0; k < j; k++)
                 a[k] = '\0';
             j = 0;
         }
@@ -189,7 +189,7 @@ Status checkString(char s[])
         printf("表达式输入错误!");
         return ERROR;
     }
-	printf("\n最终的表达式为:");
+    printf("\n最终的表达式为:");
     for (k = 0; s[k] != '\0'; k++)
         printf("%c" ,s[k]);
     printf("\n");
@@ -223,10 +223,10 @@ char getTopLStackchar(LinkStackT *s)
 Status convertString(char s1[], char s2[], LinkStackT *s)
 {
     int i = 0;
-	int j = 0;
-    int flag = 0;		//用于分隔右括号和运算符
+    int j = 0;
+    int flag = 0;       //用于分隔右括号和运算符
     char c;
-	
+
     while (s1[i] != '\0')
     {
         if ((s1[i] >= '0' && s1[i] <= '9') || s1[i] == '.')
@@ -272,14 +272,14 @@ Status convertString(char s1[], char s2[], LinkStackT *s)
             {
                 switch (judgePriority(s1[i], getTopLStackchar(s)))
                 {
-                	case -1:
+                    case -1:
                     {
                         pushLStackchar(s , s1[i]);
                         printf("运算符优先级比栈顶高，入栈！\n");
                         break;
                     }
-                	case 0:
-                	case 1:
+                    case 0:
+                    case 1:
                     {
                         while (judgePriority(s1[i], getTopLStackchar(s)) != -1)
                         {
@@ -342,20 +342,20 @@ Status convertString(char s1[], char s2[], LinkStackT *s)
  */
 int judgePriority(char a, char b)
 {
-    if ((( a == '+'|| a == '-') && (  b == '+'|| b == '-')) || ((a == '*'||a == '/') && (b == '*'||b == '/')))
-        return 1;	//代表二者优先级相等
+    if ((( a == '+' || a == '-') && (  b == '+' || b == '-')) || ((a == '*' || a == '/') && (b == '*' || b == '/')))
+        return 1;   //代表二者优先级相等
     else if ((a == '+'||a == '-') && (b == '*'||b == '/'))
-        return 0;	//代表右边优先级高
+        return 0;   //代表右边优先级高
     else
-        return -1;	//代表左边优先级高
+        return -1;  //代表左边优先级高
 }
 
 double computeString(LinkStackT *s1, char s[])
 {
     double temp = 0;
     int flag = 0;
-	int i = 0;
-	
+    int i = 0;
+
     for (i = 0; s[i] != '\0'; i++)
     {
         if (s[i] == '.')
@@ -383,10 +383,10 @@ double computeString(LinkStackT *s1, char s[])
             popLStackdouble(s1, &b);
             switch(s[i])
             {
-	            case '+':temp2 = a + b;pushLStackdouble(s1, temp2);temp2 = 0;break;
-	            case '-':temp2 = b - a;pushLStackdouble(s1, temp2);temp2 = 0;break;
-	            case '*':temp2 = b * a;pushLStackdouble(s1, temp2);temp2 = 0;break;
-	            case '/':temp2 = b / a;pushLStackdouble(s1, temp2);temp2 = 0;break;
+                case '+':temp2 = a + b;pushLStackdouble(s1, temp2);temp2 = 0;break;
+                case '-':temp2 = b - a;pushLStackdouble(s1, temp2);temp2 = 0;break;
+                case '*':temp2 = b * a;pushLStackdouble(s1, temp2);temp2 = 0;break;
+                case '/':temp2 = b / a;pushLStackdouble(s1, temp2);temp2 = 0;break;
             }
         }
     }
